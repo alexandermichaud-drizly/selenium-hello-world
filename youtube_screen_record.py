@@ -4,11 +4,7 @@ from time import sleep
 from subprocess import Popen
 from subprocess import call
 
-cmd = 'screencapture out'
-
-def terminate(process):
-    if process.poll() is None:
-        call('taskkill /F /T /PID ' + str(process.pid))
+cmd = 'screencapture -v obama.mov'
 
 test_url = "https://youtu.be/5Yu9UBKCwOY"
 
@@ -28,6 +24,6 @@ while not driver.execute_script('return document.getElementsByTagName("video")[0
         sys.stdout.write('\b')
     s += 1
 
-terminate(videoRecording)
+sys.stdout.write('c\n')
 driver.close()
 
