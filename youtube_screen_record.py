@@ -2,7 +2,6 @@ import sys
 from selenium import webdriver
 from time import sleep
 from subprocess import Popen
-from subprocess import call
 
 cmd = 'screencapture -v obama.mov'
 
