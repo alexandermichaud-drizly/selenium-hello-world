@@ -12,7 +12,7 @@ driver.get(test_url)
 video = driver.find_element_by_id("player-container-outer")
 
 s = 0
-videoRecording = Popen(cmd, shell=True) # start recording
+videoRecording = Popen(cmd, shell=True) # Start recording
 video.click()
 
 while not driver.execute_script('return document.getElementsByTagName("video")[0].ended'):
@@ -23,6 +23,6 @@ while not driver.execute_script('return document.getElementsByTagName("video")[0
         sys.stdout.write('\b')
     s += 1
 
-sys.stdout.write('c\n')
+sys.stdout.write('c\n') # End recording
 driver.close()
 
