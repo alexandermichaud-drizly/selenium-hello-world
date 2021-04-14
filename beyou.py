@@ -1,7 +1,8 @@
 import sys
 from selenium import webdriver
+from os import rename
 from time import sleep
-from subprocess import Popen
+from subprocess import Popen, PIPE
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -37,9 +38,8 @@ def record(driver, videos):
         driver.get(video)
         entry_title = WebDriverWait(driver,15).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'h1.entry-title')))
 
-        cmd = f'screencapture -v videos/{i}_{entry_title.text}'
         s = 0
-        videoRecording = Popen(cmd, shell=True) # Start recording
+        process = Popen('screencapture -gv videos/temp.mov', shell=True, stdin=PIPE) # Start recording
         
         driver.switch_to.frame(driver.find_element_by_tag_name("iframe"))
         play_button = driver.find_element_by_css_selector("#player > div.vp-controls-wrapper > div.vp-controls > button > div.play-icon")
@@ -51,16 +51,14 @@ def record(driver, videos):
 
         finished = False
         while not finished:
-            sys.stdout.write(f'Recording time: {s} secs')
-            sys.stdout.flush()
-            sleep(1)
-            for _ in range(23):
-                sys.stdout.write('\b')
-            s += 1
             finished = progress.get_attribute("style") == "width: 100%;"
 
-        sys.stdout.write('c\n') # End recording
         driver.switch_to.default_content()
+        process.stdin.close()
+
+        sleep(2)
+        new_name = 'videos/' + str(i) + '_' + entry_title.text + '.mov' 
+        rename('videos/temp.mov', new_name)
 
     driver.close()
 
